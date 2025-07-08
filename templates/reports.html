@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}报告 - 库存管理系统{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">库存报告</h1>
+</div>
+
+<!-- 低库存警告 -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-warning">
+                    <i class="fas fa-exclamation-triangle"></i> 低库存警告
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if low_stock_products %}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-warning">
+                            <tr>
+                                <th>产品名称</th>
+                                <th>当前库存</th>
+                                <th>阈值</th>
+                                <th>分类</th>
+                                <th>供应商</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in low_stock_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td><span class="text-danger font-weight-bold">{{ product.quantity }}</span></td>
+                                <td>{{ product.low_stock_threshold }}</td>
+                                <td>
+                                    {% if product.category %}
+                                    {{ product.category.name }}
+                                    {% else %}
+                                    <span class="text-muted">未分类</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if product.supplier %}
+                                    {{ product.supplier.name }}
+                                    {% else %}
+                                    <span class="text-muted">无供应商</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('adjust_stock', product_id=product.id) }}" class="btn btn-sm btn-primary">
+                                        补货
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-3">
+                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                    <p class="text-success">没有低库存产品，库存状况良好！</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 最近库存变动 -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-history"></i> 最近库存变动
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if recent_transactions %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>时间</th>
+                                <th>产品</th>
+                                <th>操作类型</th>
+                                <th>数量</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in recent_transactions %}
+                            <tr>
+                                <td>{{ transaction.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ transaction.product.name }}</td>
+                                <td>
+                                    {% if transaction.transaction_type == 'in' %}
+                                    <span class="badge bg-success">入库</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">出库</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if transaction.transaction_type == 'in' %}
+                                    <span class="text-success">+{{ transaction.quantity }}</span>
+                                    {% else %}
+                                    <span class="text-danger">-{{ transaction.quantity }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if transaction.notes %}
+                                    {{ transaction.notes }}
+                                    {% else %}
+                                    <span class="text-muted">无备注</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-3">
+                    <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+                    <p class="text-muted">暂无库存变动记录</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
