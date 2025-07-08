@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}添加产品 - 库存管理系统{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">添加新产品</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('products') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> 返回产品列表
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">产品名称 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">价格 <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">¥</span>
+                                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">产品描述</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="输入产品详细描述..."></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="quantity" class="form-label">初始数量 <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="low_stock_threshold" class="form-label">低库存阈值</label>
+                                <input type="number" class="form-control" id="low_stock_threshold" name="low_stock_threshold" min="0" value="10">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="category_id" class="form-label">分类</label>
+                                <select class="form-select" id="category_id" name="category_id">
+                                    <option value="">选择分类</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="supplier_id" class="form-label">供应商</label>
+                        <select class="form-select" id="supplier_id" name="supplier_id">
+                            <option value="">选择供应商</option>
+                            {% for supplier in suppliers %}
+                            <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('products') }}" class="btn btn-secondary me-md-2">取消</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 保存产品
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="card-title mb-0">快速操作</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('add_category') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-plus"></i> 添加新分类
+                    </a>
+                    <a href="{{ url_for('add_supplier') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-plus"></i> 添加新供应商
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">填写提示</h6>
+            </div>
+            <div class="card-body">
+                <ul class="small text-muted">
+                    <li>产品名称和价格为必填项</li>
+                    <li>低库存阈值用于触发库存警告</li>
+                    <li>可以先不选择分类和供应商，后续再编辑</li>
+                    <li>初始数量建议根据实际库存填写</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

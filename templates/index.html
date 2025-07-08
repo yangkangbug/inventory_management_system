@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}首页 - 库存管理系统{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">库存概览</h1>
+</div>
+
+<!-- 统计卡片 -->
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">总产品数</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_products }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-boxes fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">低库存产品</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ low_stock_count }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">库存总价值</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">¥{{ "%.2f"|format(total_value) }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">快速操作</div>
+                        <a href="{{ url_for('add_product') }}" class="btn btn-sm btn-primary">添加产品</a>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-plus fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 最近添加的产品 -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">最近添加的产品</h6>
+            </div>
+            <div class="card-body">
+                {% if recent_products %}
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>产品名称</th>
+                                <th>数量</th>
+                                <th>价格</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in recent_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>
+                                    {% if product.is_low_stock %}
+                                    <span class="low-stock">{{ product.quantity }}</span>
+                                    {% else %}
+                                    {{ product.quantity }}
+                                    {% endif %}
+                                </td>
+                                <td>¥{{ "%.2f"|format(product.price) }}</td>
+                                <td>
+                                    {% if product.is_low_stock %}
+                                    <span class="badge bg-warning">低库存</span>
+                                    {% else %}
+                                    <span class="badge bg-success">正常</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('adjust_stock', product_id=product.id) }}" class="btn btn-sm btn-outline-primary">调整库存</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">暂无产品数据。<a href="{{ url_for('add_product') }}">添加第一个产品</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">快速导航</h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{{ url_for('add_product') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-plus"></i> 添加新产品
+                    </a>
+                    <a href="{{ url_for('products') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-box"></i> 查看所有产品
+                    </a>
+                    <a href="{{ url_for('add_category') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-tag"></i> 添加分类
+                    </a>
+                    <a href="{{ url_for('add_supplier') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-truck"></i> 添加供应商
+                    </a>
+                    <a href="{{ url_for('reports') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-chart-bar"></i> 查看报告
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

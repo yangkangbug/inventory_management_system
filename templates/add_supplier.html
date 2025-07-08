@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}添加供应商 - 库存管理系统{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">添加新供应商</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('suppliers') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> 返回供应商列表
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">供应商名称 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" required placeholder="输入供应商名称">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contact_person" class="form-label">联系人</label>
+                                <input type="text" class="form-control" id="contact_person" name="contact_person" placeholder="联系人姓名">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">联系电话</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="联系电话">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">邮箱地址</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="邮箱地址">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">地址</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" placeholder="详细地址"></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('suppliers') }}" class="btn btn-secondary me-md-2">取消</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 保存供应商
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="card-title mb-0">供应商说明</h6>
+            </div>
+            <div class="card-body">
+                <div class="small text-muted">
+                    <p>供应商信息有助于：</p>
+                    <ul>
+                        <li>追踪产品来源</li>
+                        <li>管理采购关系</li>
+                        <li>联系供应商补货</li>
+                        <li>比较不同供应商</li>
+                    </ul>
+                    <p>只有供应商名称是必填项，其他信息可以后续补充。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

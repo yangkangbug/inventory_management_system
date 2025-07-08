@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}添加分类 - 库存管理系统{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">添加新分类</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('categories') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> 返回分类列表
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">分类名称 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" required placeholder="输入分类名称">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">分类描述</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="输入分类描述..."></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('categories') }}" class="btn btn-secondary me-md-2">取消</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 保存分类
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="card-title mb-0">分类说明</h6>
+            </div>
+            <div class="card-body">
+                <div class="small text-muted">
+                    <p>分类帮助您组织和管理产品，例如：</p>
+                    <ul>
+                        <li>电子产品</li>
+                        <li>办公用品</li>
+                        <li>食品饮料</li>
+                        <li>服装鞋帽</li>
+                        <li>日用百货</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
